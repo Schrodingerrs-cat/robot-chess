@@ -9,29 +9,27 @@ Run: python assets/build_scene.py
 Writes: assets/ur5e_chess_scene.xml
 """
 
+import os
+import sys
+
 import mujoco
 
-HERE = __file__.rsplit("/", 1)[0]
+HERE = os.path.dirname(os.path.abspath(__file__))
 UR5E_XML = f"{HERE}/menagerie/universal_robots_ur5e/ur5e.xml"
 GRIPPER_XML = f"{HERE}/menagerie/robotiq_2f85/2f85.xml"
 OUT_XML = f"{HERE}/ur5e_chess_scene.xml"
 
-BOARD_CENTER = (0.5, 0.0, 0.0)  # table-frame xy, board sits on table (z=0 slab top)
-SQUARE = 0.05  # 5cm squares -> 0.4m x 0.4m board
-BOARD_THICKNESS = 0.02
-SQUARE_TOP_Z = BOARD_THICKNESS  # top surface of board slab
-
-FILES = "abcdefgh"
-RANKS = "12345678"
-
-
-def square_center(file_idx: int, rank_idx: int) -> tuple[float, float, float]:
-    """file_idx, rank_idx in [0,7]. a1 at (file=0,rank=0), nearest-left corner."""
-    origin_x = BOARD_CENTER[0] - 3.5 * SQUARE
-    origin_y = BOARD_CENTER[1] - 3.5 * SQUARE
-    x = origin_x + file_idx * SQUARE
-    y = origin_y + rank_idx * SQUARE
-    return x, y, SQUARE_TOP_Z
+sys.path.insert(0, HERE)
+from board_geometry import (  # noqa: E402
+    ARUCO_CORNERS,
+    ARUCO_MARKER_SIZE,
+    BOARD_CENTER,
+    BOARD_THICKNESS,
+    FILES,
+    RANKS,
+    SQUARE,
+    square_center,
+)
 
 
 def build_board(spec: mujoco.MjSpec) -> None:
@@ -76,6 +74,30 @@ def build_board(spec: mujoco.MjSpec) -> None:
             pos=[dx, dy, 0],
             size=[sx, sy, BOARD_THICKNESS / 2],
             material="border_mat",
+        )
+
+
+def build_aruco_markers(spec: mujoco.MjSpec) -> None:
+    """4 ArUco markers (DICT_4X4_50, ids 0-3) on the table just beyond the board's
+    corners, for perception/board_localization.py to detect and derive a
+    pixel<->board homography. Placed on the floor (not the board body) so
+    corner pieces can never occlude them from a top-down camera.
+    """
+    half = ARUCO_MARKER_SIZE / 2
+    for marker_id, (wx, wy) in ARUCO_CORNERS.items():
+        tex_name = f"aruco_{marker_id}"
+        spec.add_texture(
+            name=tex_name,
+            type=mujoco.mjtTexture.mjTEXTURE_2D,
+            file=f"marker_{marker_id}.png",
+        )
+        spec.add_material(name=f"{tex_name}_mat", textures=["", tex_name, "", "", "", "", "", "", "", ""])
+        spec.worldbody.add_geom(
+            name=tex_name,
+            type=mujoco.mjtGeom.mjGEOM_BOX,
+            pos=[wx, wy, 0.0006],
+            size=[half, half, 0.0003],
+            material=f"{tex_name}_mat",
         )
 
 
@@ -148,6 +170,11 @@ def main() -> None:
     build_board(ur5e)
     build_pieces(ur5e)
 
+    # aruco marker pngs live in assets/aruco/, separately from the menagerie
+    # meshes that meshdir="assets/" (-> assets/assets/) already points at
+    ur5e.compiler.texturedir = f"{HERE}/aruco/"
+    build_aruco_markers(ur5e)
+
     # ground plane + lighting for rendering/reach checks
     ur5e.worldbody.add_light(name="top", pos=[0, 0, 2], type=mujoco.mjtLightType.mjLIGHT_DIRECTIONAL)
     ur5e.worldbody.add_geom(
@@ -155,6 +182,15 @@ def main() -> None:
         type=mujoco.mjtGeom.mjGEOM_PLANE,
         size=[0, 0, 0.05],
         rgba=[0.3, 0.3, 0.32, 1],
+    )
+    # fixed overhead camera for perception (board_localization.py). Top-down is
+    # deliberate, not just convenient: at an oblique angle the corner pieces'
+    # tall geometry occludes the ArUco markers just beyond the board's edge.
+    ur5e.worldbody.add_camera(
+        name="board_cam",
+        pos=[BOARD_CENTER[0], BOARD_CENTER[1], 0.85],
+        mode=mujoco.mjtCamLight.mjCAMLIGHT_TARGETBODYCOM,
+        targetbody="chessboard",
     )
 
     # attach()/compile pad the inherited "home" keyframe's qpos with zeros for
@@ -170,6 +206,13 @@ def main() -> None:
     key.qpos = qpos.tolist()
 
     xml = ur5e.to_xml()
+    # to_xml()/compile() on an in-memory spec re-resolve file-backed assets
+    # relative to CWD (unlike meshdir, which stays resolved against the
+    # originating ur5e.xml's directory since it was loaded via from_file).
+    # texturedir had to be absolute for that to work regardless of CWD; swap it
+    # back to relative here so the written XML resolves correctly from any
+    # working directory when loaded by path (relative to *its own* directory).
+    xml = xml.replace(f'texturedir="{HERE}/aruco/"', 'texturedir="aruco/"')
     with open(OUT_XML, "w") as f:
         f.write(xml)
     print(f"wrote {OUT_XML}")
