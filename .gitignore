@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.ipynb_checkpoints/
+
+# large/generated
+demos/data/
+*.mp4
+*.npz
+*.pt
+*.ckpt
+wandb/
+outputs/
+mujoco_menagerie/
+checkpoints/
+
+# datasets (fetched, not committed)
+perception/piece_detector/data/
+ChessReD/
+
+.DS_Store
