@@ -8,7 +8,7 @@ Not a from-scratch VLA/VLM/world-model project — grounds existing open-source 
 
 | Component | Choice |
 |---|---|
-| Simulator | MuJoCo (`mujoco`, `dm_control`) |
+| Simulator | MuJoCo (`mujoco`) |
 | Arm | UR5e — `mujoco_menagerie/universal_robots_ur5e` |
 | Gripper | Robotiq 2F-85 — `mujoco_menagerie/robotiq_2f85` |
 | IK | `kevinzakka/mink` |
@@ -20,17 +20,49 @@ Not a from-scratch VLA/VLM/world-model project — grounds existing open-source 
 | VLA fine-tune | SmolVLA (`lerobot`) |
 | RL fine-tune | PPO (`stable-baselines3`) |
 
+## Setup
+
+```bash
+pip install --user mujoco mink python-chess opencv-python numpy
+
+assets/fetch_menagerie.sh    # clones mujoco_menagerie, stages mesh files at assets/assets/
+engine/fetch_stockfish.sh    # downloads the Stockfish 18 Linux binary to engine/bin/stockfish
+
+python assets/build_scene.py # generates assets/ur5e_chess_scene.xml from the two menagerie MJCFs + board/pieces/markers
+```
+
+Both fetch scripts write into gitignored directories, so run them once per fresh clone/container before anything else will work.
+
+## Running it
+
+```bash
+# interactive 3D viewer -- drag to orbit, space to pause/step, see the arm + board live
+python -m mujoco.viewer --mjcf=assets/ur5e_chess_scene.xml
+
+# headless checks
+python assets/workspace_reach_check.py    # mink IK reach check over all 64 board squares
+python engine/dry_run_game.py             # full engine-vs-engine game, python-chess only, writes a PGN
+python perception/validate_localization.py # renders board_cam, checks ArUco homography against ground truth
+```
+
 ## Structure
 
 ```
-assets/                 MJCF: ur5e + robotiq_2f85 + chessboard + pieces
+assets/
+  build_scene.py            compose ur5e + 2f85 + board + pieces + ArUco markers -> ur5e_chess_scene.xml
+  board_geometry.py         shared board/square/marker world-frame coordinates
+  workspace_reach_check.py  mink IK reachability check, all 64 squares
+  fetch_menagerie.sh        clones mujoco_menagerie (gitignored)
 perception/
-  board_localization.py ArUco + homography
-  piece_detector/        GroundingDINO+SAM2 fine-tune
+  board_localization.py     ArUco detection + pixel<->board homography
+  validate_localization.py  checks the homography against sim ground truth
+  piece_detector/           GroundingDINO+SAM2 fine-tune (in progress)
 engine/
-  stockfish_interface.py python-chess <-> Stockfish
+  stockfish_interface.py    python-chess <-> Stockfish wrapper
+  dry_run_game.py           engine-vs-engine dry run, no robot
+  fetch_stockfish.sh        downloads the Stockfish binary (gitignored)
 demos/
-  scripted_expert.py     engine move -> mink IK -> joint trajectory
+  scripted_expert.py        engine move -> mink IK -> joint trajectory
 policies/
   diffusion_policy/
   act/
@@ -45,14 +77,14 @@ configs/
 
 ## Phases
 
-0. Scaffold (this commit)
-1. Env setup — arm+gripper+board MJCF, workspace reach check
-2. Chess engine + rules integration
-3. Perception — ArUco localization, GroundingDINO+SAM2 fine-tune
+0. Scaffold — done
+1. Env setup — arm+gripper+board MJCF, workspace reach check — done, 64/64 squares reachable
+2. Chess engine + rules integration — done, dry-run game reached a legal fivefold-repetition draw
+3. Perception — ArUco localization done (64/64 squares, ~3.5mm error); GroundingDINO+SAM2 fine-tune in progress
 4. Scripted expert + demo generation
 5. IL training — Diffusion Policy vs ACT
 6. SmolVLA fine-tune (language-conditioned)
 7. PPO RL fine-tune (optional, post IL)
 8. Full pipeline eval + ablation (learned vs GT-state vs classical-only perception)
 
-Each phase confirmed with user before next starts. No silent stack substitutions.
+Each phase confirmed with user before next starts. No silent stack substitutions. See `CLAUDE.md` for architecture notes and gotchas.
