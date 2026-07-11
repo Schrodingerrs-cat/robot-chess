@@ -15,11 +15,18 @@ RANKS = "12345678"
 
 
 def square_center(file_idx: int, rank_idx: int) -> tuple[float, float, float]:
-    """file_idx, rank_idx in [0,7]. a1 at (file=0,rank=0), nearest-left corner."""
+    """file_idx, rank_idx in [0,7]. a1 at (file=0,rank=0).
+
+    Rank maps to world X (near/far from the arm, which sits at the world
+    origin facing +X) and file maps to world Y (left/right), so rank 1
+    (White) sits nearest the arm and rank 8 (Black) sits farthest -- the
+    robot plays White, seated behind its own back rank like a human player,
+    not side-on to the board.
+    """
     origin_x = BOARD_CENTER[0] - 3.5 * SQUARE
     origin_y = BOARD_CENTER[1] - 3.5 * SQUARE
-    x = origin_x + file_idx * SQUARE
-    y = origin_y + rank_idx * SQUARE
+    x = origin_x + rank_idx * SQUARE
+    y = origin_y + file_idx * SQUARE
     return x, y, BOARD_TOP_Z
 
 
@@ -34,7 +41,7 @@ def square_center(file_idx: int, rank_idx: int) -> tuple[float, float, float]:
 ARUCO_MARKER_SIZE = 0.03  # 30mm square, plenty of room now it's off-board
 ARUCO_CORNERS: dict[int, tuple[float, float]] = {
     0: (BOARD_CENTER[0] - 5.2 * SQUARE, BOARD_CENTER[1] - 5.2 * SQUARE),  # beyond a1
-    1: (BOARD_CENTER[0] + 5.2 * SQUARE, BOARD_CENTER[1] - 5.2 * SQUARE),  # beyond h1
+    1: (BOARD_CENTER[0] + 5.2 * SQUARE, BOARD_CENTER[1] - 5.2 * SQUARE),  # beyond a8
     2: (BOARD_CENTER[0] + 5.2 * SQUARE, BOARD_CENTER[1] + 5.2 * SQUARE),  # beyond h8
-    3: (BOARD_CENTER[0] - 5.2 * SQUARE, BOARD_CENTER[1] + 5.2 * SQUARE),  # beyond a8
+    3: (BOARD_CENTER[0] - 5.2 * SQUARE, BOARD_CENTER[1] + 5.2 * SQUARE),  # beyond h1
 }

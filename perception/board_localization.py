@@ -15,7 +15,7 @@ import cv2
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "assets"))
-from board_geometry import ARUCO_CORNERS, FILES, RANKS, SQUARE, square_center  # noqa: E402
+from board_geometry import ARUCO_CORNERS, FILES, RANKS, square_center  # noqa: E402
 
 ARUCO_DICT = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
 ARUCO_PARAMS = cv2.aruco.DetectorParameters()
@@ -63,13 +63,23 @@ class BoardLocalizer:
 
     @staticmethod
     def board_xy_to_square(xy: tuple[float, float]) -> str:
-        """Nearest square name to a board-frame (world XY) point."""
+        """Nearest square name to a board-frame (world XY) point.
+
+        Finds the closest of the 64 square_center() points directly rather
+        than inverting file/rank -> world-axis assignments by hand, so this
+        can't silently drift out of sync if that mapping ever changes again
+        (it already has once -- see board_geometry.square_center's docstring).
+        """
         x, y = xy
-        file_idx = round((x - square_center(0, 0)[0]) / SQUARE)
-        rank_idx = round((y - square_center(0, 0)[1]) / SQUARE)
-        file_idx = min(max(file_idx, 0), 7)
-        rank_idx = min(max(rank_idx, 0), 7)
-        return f"{FILES[file_idx]}{RANKS[rank_idx]}"
+        best_square, best_dist = None, None
+        for file_idx in range(8):
+            for rank_idx in range(8):
+                sx, sy, _ = square_center(file_idx, rank_idx)
+                dist = (sx - x) ** 2 + (sy - y) ** 2
+                if best_dist is None or dist < best_dist:
+                    best_dist = dist
+                    best_square = f"{FILES[file_idx]}{RANKS[rank_idx]}"
+        return best_square
 
     def pixel_to_square(self, pixel: tuple[float, float]) -> str:
         return self.board_xy_to_square(self.pixel_to_board_xy(pixel))

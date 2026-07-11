@@ -8,20 +8,20 @@ board placement can be adjusted before Phase 2.
 Run: python assets/workspace_reach_check.py
 """
 
+import os
+import sys
+
 import mujoco
 import mink
 import numpy as np
 
-HERE = __file__.rsplit("/", 1)[0]
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+from board_geometry import BOARD_TOP_Z, FILES, RANKS  # noqa: E402
+from board_geometry import square_center as _board_square_center  # noqa: E402
+
 SCENE_XML = f"{HERE}/ur5e_chess_scene.xml"
 
-FILES = "abcdefgh"
-RANKS = "12345678"
-
-BOARD_CENTER = (0.5, 0.0, 0.0)
-SQUARE = 0.05
-BOARD_THICKNESS = 0.02
-BOARD_TOP_Z = BOARD_THICKNESS
 GRASP_Z = BOARD_TOP_Z + 0.03  # mid-height of a pawn, representative grasp point
 
 # gripper pointing straight down: 180deg rotation about world x (w,x,y,z)
@@ -34,10 +34,7 @@ DT = 0.01
 
 
 def square_center(file_idx: int, rank_idx: int) -> tuple[float, float, float]:
-    origin_x = BOARD_CENTER[0] - 3.5 * SQUARE
-    origin_y = BOARD_CENTER[1] - 3.5 * SQUARE
-    x = origin_x + file_idx * SQUARE
-    y = origin_y + rank_idx * SQUARE
+    x, y, _ = _board_square_center(file_idx, rank_idx)
     return x, y, GRASP_Z
 
 

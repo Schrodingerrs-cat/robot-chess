@@ -261,12 +261,12 @@
       <geom name="border_2" size="0.0075 0.2075 0.01" pos="0.2075 0 0" type="box" material="border_mat"/>
       <geom name="border_3" size="0.0075 0.2075 0.01" pos="-0.2075 0 0" type="box" material="border_mat"/>
     </body>
-    <body name="white_pawn_a2" pos="0.325 -0.125 0.02">
+    <body name="white_pawn_a2" pos="0.375 -0.175 0.02">
       <joint name="white_pawn_a2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_a7" pos="0.325 0.125 0.02">
+    <body name="black_pawn_a7" pos="0.625 -0.175 0.02">
       <joint name="black_pawn_a7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
@@ -276,7 +276,7 @@
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.014 0.014 0.006" pos="0 0 0.046" type="box" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_rook_a8" pos="0.325 0.175 0.02">
+    <body name="black_rook_a8" pos="0.675 -0.175 0.02">
       <joint name="black_rook_a8_free" type="free"/>
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.014 0.014 0.006" pos="0 0 0.046" type="box" rgba="0.12 0.12 0.12 1"/>
@@ -286,112 +286,112 @@
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_b7" pos="0.375 0.125 0.02">
+    <body name="black_pawn_b7" pos="0.625 -0.125 0.02">
       <joint name="black_pawn_b7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_knight_b1" pos="0.375 -0.175 0.02">
+    <body name="white_knight_b1" pos="0.325 -0.125 0.02">
       <joint name="white_knight_b1_free" type="free"/>
       <geom size="0.014 0.018" pos="0 0 0.018" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.009 0.02 0.016" pos="0.006 0 0.05" quat="0.940376 0 0.340136 0" type="box" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_knight_b8" pos="0.375 0.175 0.02">
+    <body name="black_knight_b8" pos="0.675 -0.125 0.02">
       <joint name="black_knight_b8_free" type="free"/>
       <geom size="0.014 0.018" pos="0 0 0.018" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.009 0.02 0.016" pos="0.006 0 0.05" quat="0.940376 0 0.340136 0" type="box" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_pawn_c2" pos="0.425 -0.125 0.02">
+    <body name="white_pawn_c2" pos="0.375 -0.075 0.02">
       <joint name="white_pawn_c2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_c7" pos="0.425 0.125 0.02">
+    <body name="black_pawn_c7" pos="0.625 -0.075 0.02">
       <joint name="black_pawn_c7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_bishop_c1" pos="0.425 -0.175 0.02">
+    <body name="white_bishop_c1" pos="0.325 -0.075 0.02">
       <joint name="white_bishop_c1_free" type="free"/>
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.011 0.02" pos="0 0 0.05" type="capsule" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.008" pos="0 0 0.075" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_bishop_c8" pos="0.425 0.175 0.02">
+    <body name="black_bishop_c8" pos="0.675 -0.075 0.02">
       <joint name="black_bishop_c8_free" type="free"/>
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.011 0.02" pos="0 0 0.05" type="capsule" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.008" pos="0 0 0.075" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_pawn_d2" pos="0.475 -0.125 0.02">
+    <body name="white_pawn_d2" pos="0.375 -0.025 0.02">
       <joint name="white_pawn_d2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_d7" pos="0.475 0.125 0.02">
+    <body name="black_pawn_d7" pos="0.625 -0.025 0.02">
       <joint name="black_pawn_d7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_queen_d1" pos="0.475 -0.175 0.02">
+    <body name="white_queen_d1" pos="0.325 -0.025 0.02">
       <joint name="white_queen_d1_free" type="free"/>
       <geom size="0.016 0.024" pos="0 0 0.024" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.013 0.025" pos="0 0 0.06" type="capsule" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.014" pos="0 0 0.09" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_queen_d8" pos="0.475 0.175 0.02">
+    <body name="black_queen_d8" pos="0.675 -0.025 0.02">
       <joint name="black_queen_d8_free" type="free"/>
       <geom size="0.016 0.024" pos="0 0 0.024" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.013 0.025" pos="0 0 0.06" type="capsule" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.014" pos="0 0 0.09" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_pawn_e2" pos="0.525 -0.125 0.02">
+    <body name="white_pawn_e2" pos="0.375 0.025 0.02">
       <joint name="white_pawn_e2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_e7" pos="0.525 0.125 0.02">
+    <body name="black_pawn_e7" pos="0.625 0.025 0.02">
       <joint name="black_pawn_e7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_king_e1" pos="0.525 -0.175 0.02">
+    <body name="white_king_e1" pos="0.325 0.025 0.02">
       <joint name="white_king_e1_free" type="free"/>
       <geom size="0.016 0.026" pos="0 0 0.026" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.013 0.028" pos="0 0 0.065" type="capsule" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.014 0.004 0.004" pos="0 0 0.1" type="box" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.004 0.004 0.014" pos="0 0 0.1" type="box" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_king_e8" pos="0.525 0.175 0.02">
+    <body name="black_king_e8" pos="0.675 0.025 0.02">
       <joint name="black_king_e8_free" type="free"/>
       <geom size="0.016 0.026" pos="0 0 0.026" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.013 0.028" pos="0 0 0.065" type="capsule" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.014 0.004 0.004" pos="0 0 0.1" type="box" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.004 0.004 0.014" pos="0 0 0.1" type="box" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_pawn_f2" pos="0.575 -0.125 0.02">
+    <body name="white_pawn_f2" pos="0.375 0.075 0.02">
       <joint name="white_pawn_f2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_f7" pos="0.575 0.125 0.02">
+    <body name="black_pawn_f7" pos="0.625 0.075 0.02">
       <joint name="black_pawn_f7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_bishop_f1" pos="0.575 -0.175 0.02">
+    <body name="white_bishop_f1" pos="0.325 0.075 0.02">
       <joint name="white_bishop_f1_free" type="free"/>
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.011 0.02" pos="0 0 0.05" type="capsule" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.008" pos="0 0 0.075" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_bishop_f8" pos="0.575 0.175 0.02">
+    <body name="black_bishop_f8" pos="0.675 0.075 0.02">
       <joint name="black_bishop_f8_free" type="free"/>
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.011 0.02" pos="0 0 0.05" type="capsule" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.008" pos="0 0 0.075" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_pawn_g2" pos="0.625 -0.125 0.02">
+    <body name="white_pawn_g2" pos="0.375 0.125 0.02">
       <joint name="white_pawn_g2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
@@ -401,27 +401,27 @@
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_knight_g1" pos="0.625 -0.175 0.02">
+    <body name="white_knight_g1" pos="0.325 0.125 0.02">
       <joint name="white_knight_g1_free" type="free"/>
       <geom size="0.014 0.018" pos="0 0 0.018" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.009 0.02 0.016" pos="0.006 0 0.05" quat="0.940376 0 0.340136 0" type="box" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_knight_g8" pos="0.625 0.175 0.02">
+    <body name="black_knight_g8" pos="0.675 0.125 0.02">
       <joint name="black_knight_g8_free" type="free"/>
       <geom size="0.014 0.018" pos="0 0 0.018" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.009 0.02 0.016" pos="0.006 0 0.05" quat="0.940376 0 0.340136 0" type="box" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_pawn_h2" pos="0.675 -0.125 0.02">
+    <body name="white_pawn_h2" pos="0.375 0.175 0.02">
       <joint name="white_pawn_h2_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.92 0.92 0.85 1"/>
     </body>
-    <body name="black_pawn_h7" pos="0.675 0.125 0.02">
+    <body name="black_pawn_h7" pos="0.625 0.175 0.02">
       <joint name="black_pawn_h7_free" type="free"/>
       <geom size="0.014 0.015" pos="0 0 0.015" type="cylinder" rgba="0.12 0.12 0.12 1"/>
       <geom size="0.012" pos="0 0 0.038" rgba="0.12 0.12 0.12 1"/>
     </body>
-    <body name="white_rook_h1" pos="0.675 -0.175 0.02">
+    <body name="white_rook_h1" pos="0.325 0.175 0.02">
       <joint name="white_rook_h1_free" type="free"/>
       <geom size="0.014 0.02" pos="0 0 0.02" type="cylinder" rgba="0.92 0.92 0.85 1"/>
       <geom size="0.014 0.014 0.006" pos="0 0 0.046" type="box" rgba="0.92 0.92 0.85 1"/>
@@ -466,6 +466,6 @@
   </actuator>
 
   <keyframe>
-    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0 0.325 -0.125 0.02 1 0 0 0 0.325 0.125 0.02 1 0 0 0 0.325 -0.175 0.02 1 0 0 0 0.325 0.175 0.02 1 0 0 0 0.375 -0.125 0.02 1 0 0 0 0.375 0.125 0.02 1 0 0 0 0.375 -0.175 0.02 1 0 0 0 0.375 0.175 0.02 1 0 0 0 0.425 -0.125 0.02 1 0 0 0 0.425 0.125 0.02 1 0 0 0 0.425 -0.175 0.02 1 0 0 0 0.425 0.175 0.02 1 0 0 0 0.475 -0.125 0.02 1 0 0 0 0.475 0.125 0.02 1 0 0 0 0.475 -0.175 0.02 1 0 0 0 0.475 0.175 0.02 1 0 0 0 0.525 -0.125 0.02 1 0 0 0 0.525 0.125 0.02 1 0 0 0 0.525 -0.175 0.02 1 0 0 0 0.525 0.175 0.02 1 0 0 0 0.575 -0.125 0.02 1 0 0 0 0.575 0.125 0.02 1 0 0 0 0.575 -0.175 0.02 1 0 0 0 0.575 0.175 0.02 1 0 0 0 0.625 -0.125 0.02 1 0 0 0 0.625 0.125 0.02 1 0 0 0 0.625 -0.175 0.02 1 0 0 0 0.625 0.175 0.02 1 0 0 0 0.675 -0.125 0.02 1 0 0 0 0.675 0.125 0.02 1 0 0 0 0.675 -0.175 0.02 1 0 0 0 0.675 0.175 0.02 1 0 0 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
+    <key name="home" qpos="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0 0 0 0 0 0 0 0 0.375 -0.175 0.02 1 0 0 0 0.625 -0.175 0.02 1 0 0 0 0.325 -0.175 0.02 1 0 0 0 0.675 -0.175 0.02 1 0 0 0 0.375 -0.125 0.02 1 0 0 0 0.625 -0.125 0.02 1 0 0 0 0.325 -0.125 0.02 1 0 0 0 0.675 -0.125 0.02 1 0 0 0 0.375 -0.075 0.02 1 0 0 0 0.625 -0.075 0.02 1 0 0 0 0.325 -0.075 0.02 1 0 0 0 0.675 -0.075 0.02 1 0 0 0 0.375 -0.025 0.02 1 0 0 0 0.625 -0.025 0.02 1 0 0 0 0.325 -0.025 0.02 1 0 0 0 0.675 -0.025 0.02 1 0 0 0 0.375 0.025 0.02 1 0 0 0 0.625 0.025 0.02 1 0 0 0 0.325 0.025 0.02 1 0 0 0 0.675 0.025 0.02 1 0 0 0 0.375 0.075 0.02 1 0 0 0 0.625 0.075 0.02 1 0 0 0 0.325 0.075 0.02 1 0 0 0 0.675 0.075 0.02 1 0 0 0 0.375 0.125 0.02 1 0 0 0 0.625 0.125 0.02 1 0 0 0 0.325 0.125 0.02 1 0 0 0 0.675 0.125 0.02 1 0 0 0 0.375 0.175 0.02 1 0 0 0 0.625 0.175 0.02 1 0 0 0 0.325 0.175 0.02 1 0 0 0 0.675 0.175 0.02 1 0 0 0" ctrl="-1.5708 -1.5708 1.5708 -1.5708 -1.5708 0 0"/>
   </keyframe>
 </mujoco>
