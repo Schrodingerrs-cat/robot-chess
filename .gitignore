@@ -17,6 +17,7 @@ mujoco_menagerie/
 assets/menagerie/
 assets/assets/
 checkpoints/
+engine/bin/
 
 # datasets (fetched, not committed)
 perception/piece_detector/data/
