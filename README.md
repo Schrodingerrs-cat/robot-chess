@@ -43,6 +43,11 @@ python -m mujoco.viewer --mjcf=assets/ur5e_chess_scene.xml
 python assets/workspace_reach_check.py    # mink IK reach check over all 64 board squares
 python engine/dry_run_game.py             # full engine-vs-engine game, python-chess only, writes a PGN
 python perception/validate_localization.py # renders board_cam, checks ArUco homography against ground truth
+
+# piece detector (needs ChessReD's chessred2k subset in perception/piece_detector/data/, not fetched by a script -- see CLAUDE.md)
+python perception/piece_detector/prepare_dataset.py       # filter ChessReD annotations to train/val/test JSON
+python perception/piece_detector/finetune_groundingdino.py --balanced-sampling  # fine-tune, ~1-2hr/8 epochs on a 6GB GPU
+python perception/piece_detector/evaluate.py               # per-piece-type accuracy on the test split
 ```
 
 ## Structure
@@ -56,7 +61,11 @@ assets/
 perception/
   board_localization.py     ArUco detection + pixel<->board homography
   validate_localization.py  checks the homography against sim ground truth
-  piece_detector/           GroundingDINO+SAM2 fine-tune (in progress)
+  piece_detector/           GroundingDINO fine-tune + SAM2 box-prompted segmentation
+    prepare_dataset.py      filters ChessReD annotations to train/val/test JSON
+    finetune_groundingdino.py  fine-tunes grounding-dino-tiny on ChessReD piece boxes
+    evaluate.py             per-piece-type accuracy on the held-out test split
+    segment.py              frozen SAM2, box-prompted from the detector's output
 engine/
   stockfish_interface.py    python-chess <-> Stockfish wrapper
   dry_run_game.py           engine-vs-engine dry run, no robot
@@ -80,7 +89,7 @@ configs/
 0. Scaffold — done
 1. Env setup — arm+gripper+board MJCF, workspace reach check — done, 64/64 squares reachable
 2. Chess engine + rules integration — done, dry-run game reached a legal fivefold-repetition draw
-3. Perception — ArUco localization done (64/64 squares, ~3.5mm error); GroundingDINO+SAM2 fine-tune in progress
+3. Perception — done. ArUco localization: 64/64 squares, ~3.5mm error. GroundingDINO fine-tuned on ChessReD: 87.9% mean per-piece-type accuracy (worst category 50%); SAM2 used frozen/box-prompted (no mask ground truth to fine-tune against)
 4. Scripted expert + demo generation
 5. IL training — Diffusion Policy vs ACT
 6. SmolVLA fine-tune (language-conditioned)
