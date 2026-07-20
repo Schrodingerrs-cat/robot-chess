@@ -5,6 +5,15 @@ fixed top-down gripper orientation. Reports any square that fails to converge
 within tolerance or that requires a configuration outside joint limits, so the
 board placement can be adjusted before Phase 2.
 
+Also reports manipulability (Yoshikawa index, sqrt(det(J J^T)) of the 6x6
+arm-joint Jacobian at the pinch site) for every reachable square. A square
+being IK-reachable at all is weaker than being reachable at a well-conditioned
+pose: low manipulability means the solved configuration sits close to a
+kinematic singularity, where small task-space grasp/lift/place motions in
+Phase 4's scripted expert demand large or fast joint motions -- fragile,
+jerky trajectories even though the IK "succeeded". Re-run whenever board
+geometry changes (this is the pre-flight check for Phase 4).
+
 Run: python assets/workspace_reach_check.py
 """
 
@@ -60,10 +69,27 @@ def solve_square(configuration, task, model, target_pos):
     return False, pos_err, ori_err, None
 
 
+ARM_DOF_ADR = list(range(6))  # shoulder_pan/lift, elbow, wrist_1/2/3 -- see joint dofadr in the compiled model
+
+
+def manipulability(model, data, site_name: str) -> float:
+    """Yoshikawa manipulability index sqrt(det(J J^T)) of the 6x6 Jacobian
+    (3 position + 3 orientation rows) restricted to the arm's 6 joint columns.
+    Near zero means the pose is near a kinematic singularity.
+    """
+    site_id = model.site(site_name).id
+    jacp = np.zeros((3, model.nv))
+    jacr = np.zeros((3, model.nv))
+    mujoco.mj_jacSite(model, data, jacp, jacr, site_id)
+    J = np.vstack([jacp[:, ARM_DOF_ADR], jacr[:, ARM_DOF_ADR]])
+    return float(np.sqrt(max(np.linalg.det(J @ J.T), 0.0)))
+
+
 def main() -> None:
     model = mujoco.MjModel.from_xml_path(SCENE_XML)
     configuration = mink.Configuration(model)
     configuration.update_from_keyframe("home")
+    data = mujoco.MjData(model)
 
     task = mink.FrameTask(
         frame_name="/pinch",
@@ -74,6 +100,7 @@ def main() -> None:
     )
 
     results = {}
+    manip = {}
     warm_start = configuration.q.copy()
     for rank_idx in range(8):
         for file_idx in range(8):
@@ -83,7 +110,14 @@ def main() -> None:
             configuration.update()
             ok, pos_err, ori_err, q_sol = solve_square(configuration, task, model, target_pos)
             results[square] = (ok, pos_err, ori_err)
-            print(f"{square}: {'OK' if ok else 'FAIL'}  pos_err={pos_err*1000:.2f}mm  ori_err={ori_err:.3f}rad")
+            if ok:
+                data.qpos[: model.nq] = configuration.q
+                mujoco.mj_forward(model, data)
+                manip[square] = manipulability(model, data, "/pinch")
+            print(
+                f"{square}: {'OK' if ok else 'FAIL'}  pos_err={pos_err*1000:.2f}mm  ori_err={ori_err:.3f}rad"
+                + (f"  manip={manip[square]:.4f}" if ok else "")
+            )
 
     n_ok = sum(1 for ok, _, _ in results.values() if ok)
     print(f"\n{n_ok}/64 squares reachable")
@@ -92,6 +126,11 @@ def main() -> None:
         print(f"UNREACHABLE: {failed}")
     else:
         print("All 64 squares reachable within tolerance.")
+
+    worst = sorted(manip.items(), key=lambda kv: kv[1])[:10]
+    print("\nworst 10 squares by manipulability (lowest = closest to a singularity):")
+    for square, m in worst:
+        print(f"  {square}: {m:.4f}")
 
 
 if __name__ == "__main__":

@@ -45,3 +45,27 @@ ARUCO_CORNERS: dict[int, tuple[float, float]] = {
     2: (BOARD_CENTER[0] + 5.2 * SQUARE, BOARD_CENTER[1] + 5.2 * SQUARE),  # beyond h8
     3: (BOARD_CENTER[0] - 5.2 * SQUARE, BOARD_CENTER[1] + 5.2 * SQUARE),  # beyond h1
 }
+
+
+# Off-board holding area for pieces captured by White's moves (Black's own
+# captures are procedural/teleported -- see project memory -- so this is only
+# ever populated by the scripted expert, never read for Black). Placed beyond
+# the h-file edge (y > board's h-file edge at 0.2) rather than beyond the far
+# rank: reachability was verified via IK at the tallest piece's grasp height
+# (king, grasp_z=0.065 -- see piece_geometry.py) across this x/y range before
+# committing to it (all sub-1mm error), whereas extending past the far rank
+# risks the arm's full-extension singularity. 2 rows x 8 columns per color
+# (16 slots) comfortably covers the max 15 non-king pieces a side can lose.
+GRAVEYARD_ROW_Y = {"white": 0.25, "black": 0.35}  # which color's captured pieces
+GRAVEYARD_ROW_SPACING = 0.04
+GRAVEYARD_COL_X_START = 0.35
+GRAVEYARD_COL_SPACING = 0.043
+GRAVEYARD_COLS = 8
+
+
+def graveyard_slot(captured_color: str, index: int) -> tuple[float, float, float]:
+    """index-th slot (0-based, up to 15) for a captured piece of captured_color."""
+    row, col = divmod(index, GRAVEYARD_COLS)
+    x = GRAVEYARD_COL_X_START + col * GRAVEYARD_COL_SPACING
+    y = GRAVEYARD_ROW_Y[captured_color] + row * GRAVEYARD_ROW_SPACING
+    return x, y, BOARD_TOP_Z

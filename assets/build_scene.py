@@ -30,6 +30,7 @@ from board_geometry import (  # noqa: E402
     SQUARE,
     square_center,
 )
+from piece_geometry import BASE_RADIUS  # noqa: E402
 
 
 def build_board(spec: mujoco.MjSpec) -> None:
@@ -101,11 +102,14 @@ def build_aruco_markers(spec: mujoco.MjSpec) -> None:
         )
 
 
-# piece geometry: (kind, height, rgba-agnostic; color set per-piece by side)
+# piece geometry: (kind, height, rgba-agnostic; color set per-piece by side).
+# Sizes/z-positions here are mirrored in piece_geometry.py's PIECE_DIMENSIONS
+# (grasp heights for demos/scripted_expert.py) -- keep both in sync if you
+# change a piece's shape here.
 def add_piece(spec: mujoco.MjSpec, name: str, kind: str, pos, rgba) -> None:
     body = spec.worldbody.add_body(name=name, pos=[pos[0], pos[1], pos[2]])
     body.add_freejoint(name=f"{name}_free")
-    base_r = 0.014
+    base_r = BASE_RADIUS
 
     if kind == "pawn":
         body.add_geom(type=mujoco.mjtGeom.mjGEOM_CYLINDER, size=[base_r, 0.015, 0], pos=[0, 0, 0.015], rgba=rgba)
@@ -166,6 +170,18 @@ def main() -> None:
     # impratio=10 tuning that its finger-pad contacts need for stable grasps.
     ur5e.option.cone = mujoco.mjtCone.mjCONE_ELLIPTIC
     ur5e.option.impratio = 10
+
+    # Tried raising 2f85's stock pad friction (0.6-0.7 sliding) on the theory
+    # that it was too low for a stable grasp on this project's smooth-cylinder
+    # chess pieces (see demos/physics_executor.py's grasp-margin calibration).
+    # Reverted: friction=1.2 made EVERY piece type's grasp worse, including
+    # pawn/knight which held fine at the stock value -- so insufficient
+    # friction was not the actual bottleneck. Left as a flag for whoever
+    # revisits real-contact-physics grasping: the failure mode (piece
+    # extrudes sideways from between two flat rigid pads under lift-induced
+    # load, regardless of friction level or closing force tested from 5-150
+    # ctrl units) looks like a normal-direction contact-stability problem,
+    # not a tangential-friction one.
 
     build_board(ur5e)
     build_pieces(ur5e)
